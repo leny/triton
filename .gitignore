@@ -1,0 +1,22 @@
+syntax: glob
+
+*~
+._*
+.DS_Store
+.idea
+
+# package directories
+node_modules
+
+# project dev files
+.serverless
+.eslintcache
+.webpack
+.env
+
+# build targets
+bin
+dist
+
+# reports
+/report.*
