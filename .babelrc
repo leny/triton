@@ -7,7 +7,10 @@
                 "root": ["./src"],
                 "alias": {
                     "core": "./src/core",
-                    "schema": "./src/schema",
+                    "components": "./src/components",
+                    "containers": "./src/containers",
+                    "store": "./src/store",
+                    "hooks": "./src/core/hooks",
                     "utils": "./src/core/utils"
                 }
             }
