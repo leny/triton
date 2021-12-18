@@ -1,21 +1,29 @@
 {
-  "name": "leny/triton",
+  "name": "@leny/triton",
   "version": "0.0.1",
   "private": true,
   "description": "Tinkerpop Gremlin browser/visualizer for AWS Neptune",
+  "main": "src/electron.js",
   "engines": {
     "node": ">=16.9.1"
   },
+  "context": "electron-renderer",
   "scripts": {
     "preinstall": "npx check-engine",
-    "lint": "npx eslint --fix --cache src"
+    "lint": "npx eslint --fix --cache src",
+    "work:electron": "npx electron .",
+    "work:react": "npx parcel src/app.html"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leny/triton.git"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "~7.16.5",
+    "@babel/preset-env": "~7.16.5",
+    "@babel/preset-react": "~7.16.5",
     "@leny/eslint-config": "~0.1.0",
+    "babel-plugin-module-resolver": "~4.1.0",
     "electron": "~16.0.4",
     "eslint": "~7.32.0",
     "eslint-plugin-prettier": "~4.0.0",
@@ -42,5 +50,13 @@
     "hooks": {
       "pre-commit": "npx lint-staged"
     }
+  },
+  "dependencies": {
+    "axios": "~0.24.0",
+    "electron-is-dev": "~2.0.0",
+    "parcel": "~2.0.1",
+    "react": "~17.0.2",
+    "react-dom": "~17.0.2",
+    "vis-network": "~9.1.0"
   }
 }
