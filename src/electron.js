@@ -10,6 +10,9 @@ const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 800,
         heigth: 600,
+        webPreferences: {
+            webSecurity: false,
+        },
     });
 
     if (isDev) {
@@ -35,3 +38,10 @@ app.on("window-all-closed", () => {
         app.quit();
     }
 });
+
+isDev &&
+    app.on(
+        "certificate-error",
+        (event, webContents, url, error, certificate, callback) =>
+            callback(true),
+    );
