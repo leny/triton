@@ -3,16 +3,19 @@
  * /src/containers/settings.js
  */
 
-import {useCallback, useState} from "react";
+import {useCallback, useState, useContext} from "react";
+import {StoreContext} from "store/index";
+import fetchVertexByUuid from "store/actions/fetch-vertex-by-uuid";
 
-const SettingsContainer = ({onChangeStartPoint}) => {
-    const [startPointId, setStartPointId] = useState("");
+const SettingsContainer = () => {
+    const {dispatch, fetching} = useContext(StoreContext);
+    const [vertexUid, setVertexUid] = useState("");
     const handleSubmit = useCallback(
         e => {
             e.preventDefault();
-            onChangeStartPoint(startPointId);
+            dispatch(fetchVertexByUuid(vertexUid));
         },
-        [onChangeStartPoint, startPointId],
+        [vertexUid],
     );
 
     return (
@@ -20,18 +23,21 @@ const SettingsContainer = ({onChangeStartPoint}) => {
             <fieldset>
                 <legend>{"Settings"}</legend>
                 <div>
-                    <label htmlFor={"start-point"}>{"Start point uuid:"}</label>
+                    <label htmlFor={"vertex-uid"}>{"Fetch vertex:"}</label>
                     <input
                         type={"text"}
-                        name={"start-point"}
-                        id={"start-point"}
-                        value={startPointId}
+                        name={"vertex-uid"}
+                        id={"vertex-uid"}
+                        placeholder={"Vertex UUID"}
+                        value={vertexUid}
                         onChange={e => {
-                            setStartPointId(e.currentTarget.value);
+                            setVertexUid(e.currentTarget.value);
                         }}
                     />
                 </div>
-                <button type={"submit"}>{"Load"}</button>
+                <button type={"submit"} disabled={fetching}>
+                    {fetching ? "Fetching vertex…" : "Fetch vertex"}
+                </button>
             </fieldset>
         </form>
     );
