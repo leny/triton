@@ -8,6 +8,8 @@ import {
     ACTION_CLEAR_ALL,
     ACTION_FETCH_VERTEX,
     ACTION_PARSE_TREE_RESPONSE,
+    ACTION_SELECT_ELEMENT,
+    ACTION_UNSELECT_ELEMENT,
 } from "./types";
 
 import uniqBy from "lodash.uniqby";
@@ -19,6 +21,7 @@ export const initState = () => ({
     fetching: false,
     nodes: [],
     edges: [],
+    selectedElement: null,
 });
 
 const reducersMap = new Map();
@@ -32,6 +35,21 @@ reducersMap.set(ACTION_PARSE_TREE_RESPONSE, (state, {nodes, edges}) => ({
     fetching: false,
     nodes: uniqBy([...state.nodes, ...nodes], "id"),
     edges: uniqBy([...state.edges, ...edges], "id"),
+}));
+
+reducersMap.set(ACTION_SELECT_ELEMENT, (state, {target, id}) => ({
+    ...state,
+    selectedElement: {
+        type: target,
+        id,
+        element: state[target === "node" ? "nodes" : "edges"].find(
+            elt => elt.id === id,
+        ),
+    },
+}));
+reducersMap.set(ACTION_UNSELECT_ELEMENT, state => ({
+    ...state,
+    selectedElement: null,
 }));
 
 export const reducer = (state, {type, ...payload}) => {

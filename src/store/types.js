@@ -6,3 +6,6 @@
 export const ACTION_CLEAR_ALL = "store.actions.clear-all";
 export const ACTION_FETCH_VERTEX = "store.actions.fetch-vertex";
 export const ACTION_PARSE_TREE_RESPONSE = "store.actions.parse-tree-response";
+
+export const ACTION_SELECT_ELEMENT = "store.actions.select-element";
+export const ACTION_UNSELECT_ELEMENT = "store.actions.unselect-element";
