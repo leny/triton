@@ -8,8 +8,8 @@ const isDev = require("electron-is-dev");
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 800,
-        heigth: 600,
+        width: 1200,
+        heigth: 1000,
         webPreferences: {
             webSecurity: false,
         },
