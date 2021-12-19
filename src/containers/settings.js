@@ -15,7 +15,7 @@ const SettingsContainer = () => {
             e.preventDefault();
             dispatch(fetchVertexByUuid(vertexUid));
         },
-        [vertexUid],
+        [vertexUid, dispatch],
     );
 
     return (

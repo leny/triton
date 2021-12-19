@@ -29,6 +29,7 @@ reducersMap.set(ACTION_FETCH_VERTEX, state => ({...state, fetching: true}));
 
 reducersMap.set(ACTION_PARSE_TREE_RESPONSE, (state, {nodes, edges}) => ({
     ...state,
+    fetching: false,
     nodes: uniqBy([...state.nodes, ...nodes], "id"),
     edges: uniqBy([...state.edges, ...edges], "id"),
 }));
