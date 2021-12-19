@@ -28,6 +28,33 @@ export const initState = () => ({
     nodes: [],
     edges: [],
     selectedElement: null,
+    graphConfiguration: {
+        layout: {improvedLayout: false},
+        interaction: {
+            hideEdgesOnDrag: true,
+            tooltipDelay: 100,
+            selectConnectedEdges: false,
+        },
+        nodes: {
+            shape: "dot",
+            font: {
+                size: 12,
+                face: "Tahoma",
+            },
+            size: 10,
+        },
+        edges: {
+            color: {inherit: true},
+            width: 0.15,
+            smooth: {
+                type: "continuous",
+            },
+            arrows: {to: {enabled: true, scaleFactor: 0.6}},
+        },
+        physics: {
+            solver: "forceAtlas2Based",
+        },
+    },
 });
 
 const reducersMap = new Map();
