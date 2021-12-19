@@ -27,12 +27,14 @@ const GraphContainer = () => {
                     ...node,
                     _label: node.label,
                     label: "",
+                    title: `${node.label}(${node.id})`,
                     color: getColorForLabel(node.label),
                 })),
                 edges: edges.map(edge => ({
                     ...edge,
                     _label: edge.label,
                     label: "",
+                    title: `${edge.label}(${edge.id})`,
                 })),
             },
             {
@@ -41,7 +43,7 @@ const GraphContainer = () => {
                 layout: {improvedLayout: false},
                 interaction: {
                     hideEdgesOnDrag: true,
-                    tooltipDelay: 200,
+                    tooltipDelay: 100,
                 },
                 nodes: {
                     shape: "dot",
