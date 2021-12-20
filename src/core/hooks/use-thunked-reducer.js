@@ -10,12 +10,12 @@ export const useThunkedReducer = (...props) => {
     const thunkedDispatch = useMemo(
         () => action => {
             if (typeof action === "function") {
-                action(thunkedDispatch, state);
+                action(thunkedDispatch);
             } else {
                 dispatch(action);
             }
         },
-        [dispatch, state],
+        [dispatch],
     );
 
     return [state, thunkedDispatch];

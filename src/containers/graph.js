@@ -3,25 +3,64 @@
  * /src/containers/graph.js
  */
 
-import {useRef, useEffect, useContext} from "react";
+import {useRef, useEffect, useContext, useCallback} from "react";
 import {StoreContext} from "store/index";
 import {Network} from "vis-network";
 import {getColorForLabel} from "utils/colors";
+import {ACTION_SELECT_ELEMENT, ACTION_UNSELECT_ELEMENT} from "store/types";
 
 const GraphContainer = () => {
-    const {nodes, edges} = useContext(StoreContext);
-    const $graph = useRef(null);
+    const {nodes, edges, graphConfiguration, dispatch} =
+        useContext(StoreContext);
+    const container = useRef(null);
     const network = useRef(null);
+
+    const handleDeselect = useCallback(
+        () => dispatch({type: ACTION_UNSELECT_ELEMENT}),
+        [dispatch],
+    );
+
+    const handleSelectNode = useCallback(
+        ({nodes: selection}) => {
+            // TODO: handle multi-select
+            if (selection.length === 1) {
+                dispatch({
+                    type: ACTION_SELECT_ELEMENT,
+                    target: "node",
+                    id: selection[0],
+                });
+            } else {
+                dispatch({type: ACTION_UNSELECT_ELEMENT});
+            }
+        },
+        [dispatch],
+    );
+
+    const handleSelectEdge = useCallback(
+        ({edges: selection}) => {
+            // TODO: handle multi-select
+            if (selection.length === 1) {
+                dispatch({
+                    type: ACTION_SELECT_ELEMENT,
+                    target: "edge",
+                    id: selection[0],
+                });
+            } else {
+                dispatch({type: ACTION_UNSELECT_ELEMENT});
+            }
+        },
+        [dispatch],
+    );
 
     useEffect(() => {
         if (nodes.length === 0 && edges.length === 0) {
             return;
         }
 
-        const {width, height} = $graph.current.getBoundingClientRect();
+        const {width, height} = container.current.getBoundingClientRect();
 
         network.current = new Network(
-            $graph.current,
+            container.current,
             {
                 nodes: nodes.map(node => ({
                     ...node,
@@ -40,32 +79,24 @@ const GraphContainer = () => {
             {
                 width: `${Math.floor(width)}px`,
                 height: `${Math.floor(height)}px`,
-                layout: {improvedLayout: false},
-                interaction: {
-                    hideEdgesOnDrag: true,
-                    tooltipDelay: 100,
-                },
-                nodes: {
-                    shape: "dot",
-                    font: {
-                        size: 12,
-                        face: "Tahoma",
-                    },
-                    size: 7,
-                },
-                edges: {
-                    color: {inherit: true},
-                    width: 0.15,
-                    smooth: {
-                        type: "continuous",
-                    },
-                },
-                physics: false,
+                ...graphConfiguration,
             },
         );
-    }, [nodes, edges, $graph]);
 
-    return <div id={"graph"} ref={$graph} />;
+        network.current.addEventListener("selectNode", handleSelectNode);
+        network.current.addEventListener("deselectNode", handleDeselect);
+        network.current.addEventListener("selectEdge", handleSelectEdge);
+        network.current.addEventListener("deselectEdge", handleDeselect);
+    }, [
+        nodes,
+        edges,
+        graphConfiguration,
+        container,
+        handleSelectNode,
+        handleDeselect,
+    ]);
+
+    return <div id={"graph"} ref={container} />;
 };
 
 export default GraphContainer;

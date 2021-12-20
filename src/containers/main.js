@@ -7,8 +7,9 @@ import {DEBUG} from "core/constants";
 
 import {useThunkedReducer} from "hooks/use-thunked-reducer";
 
-import SettingsContainer from "./settings";
+import ToolbarContainer from "./toolbar";
 import GraphContainer from "./graph";
+import ElementContainer from "./element";
 
 import {initState, reducer, StoreContext} from "store/index";
 
@@ -20,8 +21,9 @@ const MainContainer = () => {
 
     return (
         <StoreContextProvider value={{...state, dispatch}}>
-            <SettingsContainer />
+            <ToolbarContainer />
             <GraphContainer />
+            <ElementContainer />
         </StoreContextProvider>
     );
 };

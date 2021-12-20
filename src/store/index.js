@@ -18,11 +18,6 @@ import {createContext} from "react";
 export const StoreContext = createContext();
 
 export const initState = () => ({
-    neptune: {
-        protocol: "https",
-        host: "localhost",
-        port: 8183,
-    },
     fetching: false,
     drawing: false,
     nodes: [],
