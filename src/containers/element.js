@@ -8,7 +8,13 @@ import {useMemo, useContext, useCallback, Fragment, useState} from "react";
 import {StoreContext} from "store/index";
 import {getColorForLabel} from "utils/colors";
 import fetchVertexByUuid from "store/actions/fetch-vertex-by-uuid";
-import {Button, Modal, ToastContainer, Toast} from "react-bootstrap";
+import {
+    ButtonGroup,
+    Button,
+    Modal,
+    ToastContainer,
+    Toast,
+} from "react-bootstrap";
 import {ACTION_UNSELECT_ELEMENT} from "store/types";
 
 const ElementContainer = () => {
@@ -36,6 +42,14 @@ const ElementContainer = () => {
         };
     }, [selectedElement, setShowDetails]);
 
+    const handleFetchParents = useCallback(
+        e => {
+            e.preventDefault();
+            dispatch({type: ACTION_UNSELECT_ELEMENT});
+            dispatch(fetchVertexByUuid(element.id, true));
+        },
+        [dispatch, element],
+    );
     const handleFetchChilds = useCallback(
         e => {
             e.preventDefault();
@@ -91,14 +105,24 @@ const ElementContainer = () => {
                                 onClick={handleShowDetails}>
                                 {"show details"}
                             </Button>
-                            <Button
-                                type={"button"}
-                                size={"sm"}
-                                variant={"secondary"}
-                                disabled={element.type !== "node"}
-                                onClick={handleFetchChilds}>
-                                {"fetch childs"}
-                            </Button>
+                            <ButtonGroup>
+                                <Button
+                                    type={"button"}
+                                    size={"sm"}
+                                    variant={"secondary"}
+                                    disabled={element.type !== "node"}
+                                    onClick={handleFetchParents}>
+                                    {"fetch parents"}
+                                </Button>
+                                <Button
+                                    type={"button"}
+                                    size={"sm"}
+                                    variant={"secondary"}
+                                    disabled={element.type !== "node"}
+                                    onClick={handleFetchChilds}>
+                                    {"fetch childs"}
+                                </Button>
+                            </ButtonGroup>
                         </div>
                     </Toast.Body>
                 </Toast>
@@ -146,14 +170,24 @@ const ElementContainer = () => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        type={"button"}
-                        size={"sm"}
-                        variant={"secondary"}
-                        disabled={element.type !== "node"}
-                        onClick={handleFetchChilds}>
-                        {"fetch childs"}
-                    </Button>
+                    <ButtonGroup>
+                        <Button
+                            type={"button"}
+                            size={"sm"}
+                            variant={"secondary"}
+                            disabled={element.type !== "node"}
+                            onClick={handleFetchParents}>
+                            {"fetch parents"}
+                        </Button>
+                        <Button
+                            type={"button"}
+                            size={"sm"}
+                            variant={"secondary"}
+                            disabled={element.type !== "node"}
+                            onClick={handleFetchChilds}>
+                            {"fetch childs"}
+                        </Button>
+                    </ButtonGroup>
                 </Modal.Footer>
             </Modal>
         </>

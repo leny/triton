@@ -4,3 +4,5 @@
  */
 
 export const DEBUG = true;
+
+export const ABORT_CONTROLLER = new AbortController();

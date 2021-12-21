@@ -6,10 +6,13 @@
 import {DEBUG} from "core/constants";
 import {
     ACTION_CLEAR_ALL,
-    ACTION_FETCH_VERTEX,
+    ACTION_FETCH_COUNT,
+    ACTION_FETCH_PROGRESS,
     ACTION_PARSE_TREE_RESPONSE,
     ACTION_SELECT_ELEMENT,
     ACTION_UNSELECT_ELEMENT,
+    ACTION_DRAWING_DONE,
+    ACTION_FETCH_DISCARD,
 } from "./types";
 
 import uniqBy from "lodash.uniqby";
@@ -19,6 +22,11 @@ export const StoreContext = createContext();
 
 export const initState = () => ({
     fetching: false,
+    batches: {
+        elements: null,
+        current: null,
+        total: null,
+    },
     drawing: false,
     nodes: [],
     edges: [],
@@ -56,14 +64,32 @@ const reducersMap = new Map();
 
 reducersMap.set(ACTION_CLEAR_ALL, () => initState());
 
-reducersMap.set(ACTION_FETCH_VERTEX, state => ({...state, fetching: true}));
+reducersMap.set(ACTION_FETCH_COUNT, state => ({
+    ...state,
+    fetching: true,
+    batches: {elements: null, current: null, total: null},
+}));
+
+reducersMap.set(ACTION_FETCH_PROGRESS, (state, {elements, current, total}) => ({
+    ...state,
+    batches: {elements, current, total},
+}));
 
 reducersMap.set(ACTION_PARSE_TREE_RESPONSE, (state, {nodes, edges}) => ({
     ...state,
     fetching: false,
+    drawing: true,
     nodes: uniqBy([...state.nodes, ...nodes], "id"),
     edges: uniqBy([...state.edges, ...edges], "id"),
 }));
+
+reducersMap.set(ACTION_DRAWING_DONE, state => ({
+    ...state,
+    drawing: false,
+    batches: {},
+}));
+
+reducersMap.set(ACTION_FETCH_DISCARD, state => state);
 
 reducersMap.set(ACTION_SELECT_ELEMENT, (state, {target, id}) => ({
     ...state,

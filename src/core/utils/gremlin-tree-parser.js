@@ -20,7 +20,27 @@ export const gremlinTreeParser = tree => {
                 });
                 break;
             case "g:Edge": {
-                const {id, inV: to, outV: from, label, properties} = value;
+                const {
+                    id,
+                    inV: to,
+                    inVLabel: toLabel,
+                    outV: from,
+                    outVLabel: fromLabel,
+                    label,
+                    properties = {},
+                } = value;
+                vertices.push(
+                    {
+                        id: from,
+                        label: fromLabel,
+                        properties: {},
+                    },
+                    {
+                        id: to,
+                        label: toLabel,
+                        properties: {},
+                    },
+                );
                 edges.push({
                     id,
                     from,

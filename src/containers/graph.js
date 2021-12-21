@@ -7,7 +7,11 @@ import {useRef, useEffect, useContext, useCallback} from "react";
 import {StoreContext} from "store/index";
 import {Network} from "vis-network";
 import {getColorForLabel} from "utils/colors";
-import {ACTION_SELECT_ELEMENT, ACTION_UNSELECT_ELEMENT} from "store/types";
+import {
+    ACTION_SELECT_ELEMENT,
+    ACTION_UNSELECT_ELEMENT,
+    ACTION_DRAWING_DONE,
+} from "store/types";
 
 const GraphContainer = () => {
     const {nodes, edges, graphConfiguration, dispatch} =
@@ -52,6 +56,11 @@ const GraphContainer = () => {
         [dispatch],
     );
 
+    const handleDrawingFinished = useCallback(
+        () => dispatch({type: ACTION_DRAWING_DONE}),
+        [dispatch],
+    );
+
     useEffect(() => {
         if (nodes.length === 0 && edges.length === 0) {
             return;
@@ -83,10 +92,13 @@ const GraphContainer = () => {
             },
         );
 
-        network.current.addEventListener("selectNode", handleSelectNode);
-        network.current.addEventListener("deselectNode", handleDeselect);
-        network.current.addEventListener("selectEdge", handleSelectEdge);
-        network.current.addEventListener("deselectEdge", handleDeselect);
+        network.current.on("selectNode", handleSelectNode);
+        network.current.on("deselectNode", handleDeselect);
+        network.current.on("selectEdge", handleSelectEdge);
+        network.current.on("deselectEdge", handleDeselect);
+        network.current.once("afterDrawing", handleDrawingFinished);
+
+        network.current.stabilize();
     }, [
         nodes,
         edges,

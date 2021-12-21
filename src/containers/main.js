@@ -10,6 +10,7 @@ import {useThunkedReducer} from "hooks/use-thunked-reducer";
 import ToolbarContainer from "./toolbar";
 import GraphContainer from "./graph";
 import ElementContainer from "./element";
+import ProgressContainer from "./progress";
 
 import {initState, reducer, StoreContext} from "store/index";
 
@@ -24,6 +25,7 @@ const MainContainer = () => {
             <ToolbarContainer />
             <GraphContainer />
             <ElementContainer />
+            <ProgressContainer />
         </StoreContextProvider>
     );
 };
